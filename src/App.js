@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';C
 
 const API_URL = "http://localhost:8080/api/v1/help";
 
@@ -28,20 +29,30 @@ export default function App() {
     ));
   };
 
-  const renderCategory = (category, categoryData, indentLevel = 1) => {
-    const indentation = `${(indentLevel - 1) * 20}px`; // Adjust indentation as needed
-    return (
-      <div key={category} style={{ marginLeft: indentation }}>
-        <h2>{category}</h2>
-        {categoryData.description && renderDescriptions(categoryData.description)}
-        {categoryData.endpoints && renderEndpoints(categoryData.endpoints)}
-        {categoryData.categories &&
-          Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) =>
-            renderCategory(subCategory, subCategoryData, indentLevel + 1)
+    const renderCategory = (category, categoryData) => {
+      return (
+        <div key={category} className="my-3">   
+          <h2 className="mb-3">{category}</h2>
+          {categoryData.description && (
+            <div className="ml-4">
+              {renderDescriptions(categoryData.description)}
+            </div>
           )}
-      </div>
-    );
-  };
+          {categoryData.endpoints && (
+            <div className="ml-4">
+              {renderEndpoints(categoryData.endpoints)}
+            </div>
+          )}
+          {categoryData.categories &&
+            Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
+              <div key={subCategory} className="ml-4">
+                {renderCategory(subCategory, subCategoryData)}
+              </div>
+            ))}
+        </div>
+      );
+    };
+  
 
   if (!data) return null;
 
