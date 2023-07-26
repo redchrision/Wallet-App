@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';C
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const API_URL = "http://localhost:8080/api/v1/help";
 
