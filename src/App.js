@@ -7,12 +7,21 @@ const API_URL = "http://localhost:8080/api/v1/help";
 
 export default function App() {
   const [data, setData] = useState(null);
+  const [openCategories, setOpenCategories] = useState([]);
 
   useEffect(() => {
     axios.get(API_URL).then((response) => {
       setData(response.data);
     });
   }, []);
+
+  const toggleDropdown = (category) => {
+    if (openCategories.includes(category)) {
+      setOpenCategories(prevState => prevState.filter(cat => cat !== category));
+    } else {
+      setOpenCategories(prevState => [...prevState, category]);
+    }
+  };
 
   const renderEndpoints = (endpoints) => {
     return Object.keys(endpoints).map((endpointName) => (
@@ -30,30 +39,37 @@ export default function App() {
     ));
   };
 
-    const renderCategory = (category, categoryData) => {
-      return (
-        <div key={category} className="my-3 left-indent-one">   
+  const renderCategory = (category, categoryData) => {
+    const isOpen = openCategories.includes(category);
+
+    return (
+      <div key={category} className="my-3 left-indent-one">
+        <div
+          onClick={() => toggleDropdown(category)}
+          className="dropdown-toggle"
+          style={{ cursor: "pointer" }}
+        >
           <h2 className="mb-3 left-indent-two-">{category}</h2>
-          {categoryData.description && (
-            <div className="ml-4 left-indent-three">
-              {renderDescriptions(categoryData.description)}
-            </div>
-          )}
-          {categoryData.endpoints && (
-            <div className="ml-4 left-indent-four">
-              {renderEndpoints(categoryData.endpoints)}
-            </div>
-          )}
-          {categoryData.categories &&
-            Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
-              <div key={subCategory} className="ml-4 left-indent-five">
-                {renderCategory(subCategory, subCategoryData)}
-              </div>
-            ))}
         </div>
-      );
-    };
-  
+        {isOpen && (
+          <div className="dropdown-menu ml-4 left-indent-three">
+            {categoryData.description && (
+              <div>{renderDescriptions(categoryData.description)}</div>
+            )}
+            {categoryData.endpoints && (
+              <div>{renderEndpoints(categoryData.endpoints)}</div>
+            )}
+          </div>
+        )}
+        {categoryData.categories &&
+          Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
+            <div key={subCategory} className="ml-4 left-indent-five">
+              {renderCategory(subCategory, subCategoryData)}
+            </div>
+          ))}
+      </div>
+    );
+  };
 
   if (!data) return null;
 
