@@ -24,13 +24,22 @@ export default function App() {
   };
 
   const renderEndpoints = (endpoints) => {
-    return Object.keys(endpoints).map((endpointName) => (
-      <div key={endpointName}>
-        <h3>{endpointName}</h3>
-        <p>Help Path: {endpoints[endpointName].helpPath}</p>
-        <p>Brief: {endpoints[endpointName].brief}</p>
-      </div>
-    ));
+    return Object.keys(endpoints).map((endpointName) => {
+      const endpoint = endpoints[endpointName];
+  
+      if (!endpoint) {
+        // Handle the case where endpoint is undefined or null
+        return null;
+      }
+  
+      return (
+        <div key={endpointName}>
+          <h3>{endpointName}</h3>
+          <p>Help Path: {endpoint.helpPath}</p>
+          <p>Brief: {endpoint.brief}</p>
+        </div>
+      );
+    });
   };
 
   const renderDescriptions = (descriptions) => {
