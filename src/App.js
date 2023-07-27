@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './customStyles.css'
 
 const API_URL = "http://localhost:8080/api/v1/help";
 
@@ -31,21 +32,21 @@ export default function App() {
 
     const renderCategory = (category, categoryData) => {
       return (
-        <div key={category} className="my-3">   
-          <h2 className="mb-3">{category}</h2>
+        <div key={category} className="my-3 left-indent-one">   
+          <h2 className="mb-3 left-indent-two-">{category}</h2>
           {categoryData.description && (
-            <div className="ml-4">
+            <div className="ml-4 left-indent-three">
               {renderDescriptions(categoryData.description)}
             </div>
           )}
           {categoryData.endpoints && (
-            <div className="ml-4">
+            <div className="ml-4 left-indent-four">
               {renderEndpoints(categoryData.endpoints)}
             </div>
           )}
           {categoryData.categories &&
             Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
-              <div key={subCategory} className="ml-4">
+              <div key={subCategory} className="ml-4 left-indent-five">
                 {renderCategory(subCategory, subCategoryData)}
               </div>
             ))}
