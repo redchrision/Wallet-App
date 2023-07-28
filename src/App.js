@@ -16,12 +16,14 @@ export default function App() {
   }, []);
 
   const toggleDropdown = (category) => {
-    if (openCategories.includes(category)) {
-      setOpenCategories(prevState => prevState.filter(cat => cat !== category));
-    } else {
-      setOpenCategories(prevState => [...prevState, category]);
-    }
-  };
+    setOpenCategories((prevOpenCategories) => {
+      if (prevOpenCategories.includes(category)) {
+        return prevOpenCategories.filter((cat) => cat !== category);
+      } else {
+        return [...prevOpenCategories, category];
+      }
+    });
+  };  
 
   const renderEndpoints = (endpoints) => {
     return Object.keys(endpoints).map((endpointName) => {
@@ -50,16 +52,13 @@ export default function App() {
 
   const renderCategory = (category, categoryData) => {
     const isOpen = openCategories.includes(category);
+    console.log(isOpen);
 
     return (
       <div key={category} className="my-3 left-indent-one">
-        <div
-          onClick={() => toggleDropdown(category)}
-          className="dropdown-toggle"
-          style={{ cursor: "pointer" }}
-        >
-          <h2 className="mb-3 left-indent-two-">{category}</h2>
-        </div>
+      <div onClick={() => toggleDropdown(category)} className="dropdown-toggle" style={{ cursor: "pointer" }}>
+        <h2 className="mb-3 left-indent-two-">{category}</h2>
+      </div>
         {isOpen && (
           <div className="dropdown-menu ml-4 left-indent-three">
             {categoryData.description && (
