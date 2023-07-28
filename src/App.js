@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import classNames from "classnames";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './customStyles.css'
 
@@ -26,11 +27,14 @@ export default function App() {
   };  
 
   const renderEndpoints = (endpoints) => {
+    if (!endpoints || Object.keys(endpoints).length === 0) {
+      return null;
+    }
+
     return Object.keys(endpoints).map((endpointName) => {
       const endpoint = endpoints[endpointName];
   
       if (!endpoint) {
-        // Handle the case where endpoint is undefined or null
         return null;
       }
   
@@ -45,6 +49,10 @@ export default function App() {
   };
 
   const renderDescriptions = (descriptions) => {
+    if (!descriptions || descriptions.length === 0) {
+      return null;
+    }
+
     return descriptions.map((desc, index) => (
       <p key={index}>Description: {desc}</p>
     ));
@@ -52,23 +60,20 @@ export default function App() {
 
   const renderCategory = (category, categoryData) => {
     const isOpen = openCategories.includes(category);
-    console.log(isOpen);
 
     return (
       <div key={category} className="my-3 left-indent-one">
-      <div onClick={() => toggleDropdown(category)} className="dropdown-toggle" style={{ cursor: "pointer" }}>
-        <h2 className="mb-3 left-indent-two-">{category}</h2>
-      </div>
-        {isOpen && (
-          <div className="dropdown-menu ml-4 left-indent-three">
-            {categoryData.description && (
-              <div>{renderDescriptions(categoryData.description)}</div>
-            )}
-            {categoryData.endpoints && (
-              <div>{renderEndpoints(categoryData.endpoints)}</div>
-            )}
-          </div>
-        )}
+        <div onClick={() => toggleDropdown(category)} className="dropdown-toggle" style={{ cursor: "pointer" }}>
+          <h2 className="mb-3 left-indent-two-">{category}</h2>
+        </div>
+        <div className={classNames("dropdown-menu", "ml-4", "left-indent-three", { show: isOpen })}>
+          {categoryData.description && (
+            <div>{renderDescriptions(categoryData.description)}</div>
+          )}
+          {categoryData.endpoints && (
+            <div>{renderEndpoints(categoryData.endpoints)}</div>
+          )}
+        </div>
         {categoryData.categories &&
           Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
             <div key={subCategory} className="ml-4 left-indent-five">
