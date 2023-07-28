@@ -18,3 +18,12 @@ margin-left: 50px;
     margin-left: 50px;
   }
 
+  .category-container {
+    transition: height 0.3s ease; /* Add smooth transition effect */
+}
+
+  .category-container.open {
+    height: auto; /* Expand the container when the dropdown is open */
+}
+  
+

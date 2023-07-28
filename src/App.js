@@ -58,12 +58,16 @@ export default function App() {
     ));
   };
 
-  const renderCategory = (category, categoryData) => {
+  const renderCategory = (category, categoryData, index) => {
     const isOpen = openCategories.includes(category);
-
+  
     return (
-      <div key={category} className="my-3 left-indent-one">
-        <div onClick={() => toggleDropdown(category)} className="dropdown-toggle" style={{ cursor: "pointer" }}>
+      <div key={category} className={`category-container ${isOpen ? "open" : ""}`}>
+        <div
+          onClick={() => toggleDropdown(category)}
+          className="dropdown-toggle"
+          style={{ cursor: "pointer" }}
+        >
           <h2 className="mb-3 left-indent-two-">{category}</h2>
         </div>
         <div className={classNames("dropdown-menu", "ml-4", "left-indent-three", { show: isOpen })}>
@@ -75,14 +79,15 @@ export default function App() {
           )}
         </div>
         {categoryData.categories &&
-          Object.entries(categoryData.categories).map(([subCategory, subCategoryData]) => (
+          Object.entries(categoryData.categories).map(([subCategory, subCategoryData], index) => (
             <div key={subCategory} className="ml-4 left-indent-five">
-              {renderCategory(subCategory, subCategoryData)}
+              {renderCategory(subCategory, subCategoryData, index)}
             </div>
           ))}
       </div>
     );
   };
+  
 
   if (!data) return null;
 
@@ -99,7 +104,7 @@ export default function App() {
         <div>
           <h1>Categories:</h1>
           {Object.entries(data.categories).map(([category, categoryData]) =>
-            renderCategory(category, categoryData)
+            renderCategory(category, categoryData, category)
           )}
         </div>
       )}
